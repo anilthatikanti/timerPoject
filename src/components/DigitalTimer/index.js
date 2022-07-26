@@ -3,30 +3,31 @@ import {Component} from 'react'
 
 import './index.css'
 
-const initialState = {counter: 25, start: false, seconds: 0}
 class DigitalTimer extends Component {
-    state = initialState
-  }
-
-  componentDidMount() {
-    this.timerId = setInterval(() => {
-      this.setState(prevState => ({seconds: prevState.seconds + 1}))
-    }, 1000)
-  }
+  state = {counter: 25, start: false, seconds: 0}
 
   componentWillUnmount = () => {
     clearInterval(this.timerId)
   }
 
   increaseCount = () => {
-    this.setState(prevState => ({counter: prevState.counter + 1}))
+    const {start} = this.state
+    if (!start) {
+      this.setState(prevState => ({counter: prevState.counter + 1}))
+    }
   }
 
   decreaseCount = () => {
-    this.setState(prevState => ({counter: prevState.counter - 1}))
+    const {counter, start} = this.state
+    if (counter > 1 && !start) {
+      this.setState(prevState => ({counter: prevState.counter - 1}))
+    }
   }
 
   timerStart = () => {
+    this.timerId = setInterval(() => {
+      this.setState(prevState => ({seconds: prevState.seconds + 1}))
+    }, 1000)
     this.setState({start: true})
   }
 
